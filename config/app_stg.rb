@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
 
-class Config
+class Config < BaseConfig
 
 end
