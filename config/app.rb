@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
-class Config
+require 'benry/config'
+
+
+class BaseConfig < Benry::BaseConfig
 
   add :app_env      , ENV['APP_ENV']  , "environment name"
 

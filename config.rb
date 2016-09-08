@@ -15,29 +15,15 @@ if app_env.nil? || app_env.empty?
   exit 1
 end
 
-if defined?(Config)     # Ruby < 2.2 has obsoleted 'Config' object
-  Object.class_eval do
-    remove_const :Config
-  end
-end
 
-## define Config class
-require 'keight'
-class Config < K8::BaseConfig
-end
+## Ruby < 2.2 has obsoleted 'Config' class, therefore remove it at first.
+Object.class_eval { remove_const :Config } if defined?(Config)
 
 ## load 'app.rb', 'app_xxx.rb' and 'app_xxx.private'
 require_relative "config/app"
 require_relative "config/app_#{app_env}"
 fpath = File.join(File.dirname(__FILE__), "config", "app_#{app_env}.private")
 load fpath if File.file?(fpath)
-
-## if SECRET value is left, report error and exit.
-errmsg = Config.validate_values()
-if errmsg
-  $stderr.write(errmsg)
-  exit 1
-end
 
 ## create $config object
 $config = Config.new()

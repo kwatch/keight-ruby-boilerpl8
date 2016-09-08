@@ -82,3 +82,86 @@ namespace :setup do
   end
 
 end
+
+
+namespace :mapping do
+
+  desc "show action mapping in text format"
+  task :text do
+    require './main'
+    $k8_app.each_mapping do |urlpath, action_class, action_methods|
+      action_methods.each do |meth, name|
+        puts "%-6s %-30s  #=> %s#%s" % [meth, urlpath, action_class, name]
+      end
+    end
+  end
+
+  desc "show action mapping in YAML format"
+  task :yaml do
+    require './main'
+    $k8_app.each_mapping do |urlpath, action_class, action_methods|
+      puts "- url:     '#{urlpath}'"
+      puts "  class:   #{action_class}"
+      s = action_methods.collect {|k, v| "#{k}: #{v}" }.join(", ")
+      puts "  method:  {#{s}}"
+      puts ""
+    end
+  end
+
+  desc "show action mapping in JSON format"
+  task :json do
+    require './main'
+    puts "{ \"mappings\": ["
+    sep = "  "
+    $k8_app.each_mapping do |urlpath, action_class, action_methods|
+      puts "#{sep}{ \"url\":    \"#{urlpath}\""
+      puts "  , \"class\":  \"#{action_class}\""
+      string = action_methods.collect {|k, v| "\"#{k}\": \"#{v}\"" }.join(", ")
+      puts "  , \"method\": {#{string}}"
+      puts "  }"
+      sep = ", "
+    end
+    puts "]}"
+  end
+
+  _format_javascript = proc do |attr|
+    require './main'
+    puts     "{"
+    dict = {}
+    $k8_app.each_mapping do |urlpath, action_class, action_methods|
+      (dict[action_class] ||= []) << [urlpath, action_methods]
+    end
+    s1 = "  "
+    dict.each do |action_class, arr|
+      puts   "#{s1}#{action_class.name.gsub(/::/, '_')}: {"
+      s2 = "  "
+      arr.each do |urlpath, action_methods|
+        rexp = /\{(\w*)(?::.*?)?\}/
+        params    = urlpath.scan(rexp).collect {|m| m[0] }
+        upath_str = urlpath.gsub(rexp, "'+\\1+'")
+        upath_str = ("'" + upath_str + "'").gsub(/\+''/, '')
+        action_methods.each do |meth, name|
+          puts "  #{s2}#{name}: function(#{params.join(', ')}) {"
+          puts "      return {#{attr}: '#{meth}', url: #{upath_str}};"
+          puts "    }"
+          s2 = ", "
+        end
+      end
+      puts "  }"
+      s1 = ", "
+    end
+    puts "}"
+  end
+
+  desc "generate Javascript code for jQuery"
+  task :jquery do
+    _format_javascript.call('type')
+    #_format_javascript.call('type')
+  end
+
+  desc "generate Javascript code for AngularJS"
+  task :angularjs do
+    _format_javascript.call('method')
+  end
+
+end
