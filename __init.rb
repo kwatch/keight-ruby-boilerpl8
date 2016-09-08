@@ -130,7 +130,7 @@ class Main
   def render_template_files(filepaths, dryrun=false)
     filepaths.each do |fpath|
       next if File.directory?(fpath)
-      next if fpath == '__setup.rb'
+      next if fpath.start_with?('__init.')
       s = Boilerpl8Template.new.from_file(fpath, 'ascii-8bit').render()
       if s != File.open(fpath, 'rb') {|f| f.read }
         File.open(fpath, 'wb') {|f| f.write(s) } unless dryrun
