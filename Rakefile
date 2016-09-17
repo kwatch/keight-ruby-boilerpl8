@@ -80,6 +80,18 @@ namespace :setup do
 end
 
 
+desc "list configs"
+task :config do
+  require './main'
+  require './config'
+  $config.instance_variables.sort.each do |ivar|
+    name = ivar.to_s.sub('@', '')
+    value = $config.__send__(name)
+    puts "%-30s = %s" % [name, value.inspect]
+  end
+end
+
+
 namespace :mapping do
 
   desc "show action mapping in text format"
