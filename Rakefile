@@ -54,7 +54,7 @@ end
 
 
 desc "install gems and download libs"
-task :setup => ['setup:gems', 'setup:static']
+task :setup => ['setup:gems', 'setup:staticlib']
 
 namespace :setup do
 
