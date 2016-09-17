@@ -24,7 +24,11 @@ task :default => :test
 
 def run(command)
   print "[rake]$ "
-  sh command
+  if command.start_with?('$GEM_HOME/bin/')
+    sh command.sub('$GEM_HOME', ENV['GEM_HOME'])
+  else
+    sh command
+  end
 end
 
 def gem_home_required
@@ -63,7 +67,7 @@ namespace :setup do
     gem_home_required()
     run "gem install bundler"
     puts ""
-    run "bundler install"
+    run "$GEM_HOME/bin/bundler install"
   end
 
   desc "download *.js etc into 'static/lib/'"
