@@ -81,6 +81,17 @@ namespace :setup do
     end
   end
 
+  desc "download *.js etc into 'static/lib/'"
+  task :staticlib do |t|
+    Dir.glob("static/lib/*/*").each do |libpath|
+      next unless File.directory?(libpath)
+      libpath =~ %r`\Astatic/lib/([^/]+)/([^/]+)\z`  or next
+      library, version = $1, $2
+      #run "k8rb cdnjs #{library} #{version}"
+      run "cdnget cdnjs #{library} #{version} static/lib"
+    end
+  end
+
 end
 
 
