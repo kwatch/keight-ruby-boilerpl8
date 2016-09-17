@@ -40,9 +40,9 @@ module BabyErubis
         elsif ch == '#'        # comment
           src << _t(lspace) << ("\n" * code.count("\n")) << _t(rspace)
         elsif lspace && rspace # statement (with spaces)
-          src << "#{lspace} #{code};#{rspace}"
+          src << "#{lspace}#{code};#{rspace}"
         else                   # statement
-          src << _t(lspace) << "#{code};" << _t(rspace)
+          src << _t(lspace) << " #{code};" << _t(rspace)
         end
       end
       text = pos == 0 ? input : input[pos..-1]   # or $' || input
@@ -52,9 +52,14 @@ module BabyErubis
     end
 
     def render(context=nil)
-      ctxobj = context.nil?          ? Object.new
-             : ! context.is_a?(Hash) ? context
-             : context.each_with_object(Object.new) {|o, (k, v)| o.instance_variable_set("@#{k}", v) }
+      if context.nil?
+        ctxobj = Object.new
+      elsif context.is_a?(Hash)
+        ctxobj = Object.new
+        context.each {|k, v| ctxobj.instance_variable_set("@#{k}", v) }
+      else
+        ctxobj = context
+      end
       return ctxobj.instance_eval(&@proc)
     end
 
@@ -87,44 +92,69 @@ end
 
 class Main
 
+  class SystemError < StandardError
+  end
+
   def self.main
-    self.new.run(*ARGV)
+    begin
+      self.new.run(*ARGV)
+    rescue SystemError
+      $stderr.puts "***"
+      $stderr.puts "*** ERROR: Command failed."
+      $stderr.puts "***        See above error message."
+      $stderr.puts "***"
+      exit 1
+    end
   end
 
   def run(*args)
-    dryrun = args[0] == '-D'
     autoremove = ["index.txt", __FILE__]
-    fu = dryrun ? FileUtils::DryRun : FileUtils::Verbose
+    #
+    rm_rf '**/.keep'
     #
     files = Dir.glob('**/*', File::FNM_DOTMATCH).reject {|x|
       x == '.git' || x.start_with?('.git/') || \
       x == '.' || x.end_with?('/.') || autoremove.include?(x)
     }
     #
-    keeps, files = files.partition {|x| x.end_with?('/.keep') }
-    fu.rm keeps
-    #
     render_template_files(files)
+    puts ""
     #
     puts "## install gems"
     sys "gem install bundler"
-    sys "bundler install"
+    sys "$GEM_HOME/bin/bundler install"
+    puts ""
     #
     puts "## download jquery and so on"
     download_libraries_in("app/template/_layout.html.eruby", "static/lib")
     #
     puts "## files"
+    puts File.basename(Dir.pwd) + "/"
     descs = parse_index_file("index.txt")
     print_files(files, descs)
+    puts ""
     #
-    fu.rm autoremove
+    puts "## remove files"
+    rm_rf *autoremove
   end
 
   private
 
-  def sys(*args)
-    puts "$ #{args.join(' ')}"
-    system *args
+  def sys(cmd)
+    if ENV['GEM_HOME']
+      puts "$ #{cmd}"
+      cmd = cmd.gsub(/\$GEM_HOME/, ENV['GEM_HOME'])
+    else
+      cmd = cmd.gsub(/\$GEM_HOME\/bin\//, '')
+      puts "$ #{cmd}"
+    end
+    system cmd  or
+      raise SystemError.new
+  end
+
+  def rm_rf(*args)
+    puts "$ rm -rf #{args.join(' ')}"
+    FileUtils.rm_rf args.each {|x| Dir.glob(x) }
   end
 
   def render_template_files(filepaths, dryrun=false)
@@ -166,7 +196,7 @@ class Main
       list << [library, version]
     end
     list.uniq.each do |library, version|
-      sys "cdnget cdnjs #{library} #{version} #{destdir}"
+      sys "$GEM_HOME/bin/cdnget cdnjs #{library} #{version} #{destdir}"
     end
   end
 
