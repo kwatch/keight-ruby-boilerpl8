@@ -7,7 +7,7 @@ cdn_baseurl  = 'https://cdnjs.cloudflare.com/ajax/libs'  # CDNJS
 
 ga_code = $config.google_analytics_code
 
-if $config.app_env == 'dev'
+if $config.app_mode == 'dev'
   cdn_baseurl = '/static/lib'
   ga_code     = nil
 end

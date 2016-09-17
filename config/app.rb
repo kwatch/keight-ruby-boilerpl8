@@ -5,7 +5,7 @@ require 'benry/config'
 
 class BaseConfig < Benry::BaseConfig
 
-  add :app_env      , ENV['APP_ENV']  , "environment name"
+  add :app_mode     , ENV['APP_MODE'] , "prod, stg, dev or test"
 
   ## database
   add :db_host      , 'localhost'     , "DB host name"

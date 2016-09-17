@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 
-app_env = ENV['APP_ENV']    # 'dev', 'prod', 'stg', 'test'
-if app_env.nil? || app_env.empty?
+app_mode = ENV['APP_MODE']    # 'dev', 'prod', 'stg', 'test'
+if app_mode.nil? || app_mode.empty?
   $stderr.write '
 **
-** ERROR: Set $APP_ENV environment variable at first.
+** ERROR: Set $APP_MODE environment variable at first.
 **
 ** Example (MacOSX, UNIX):
-**    $ export APP_ENV=dev       # development mode
-**    $ export APP_ENV=prod      # production mode
-**    $ export APP_ENV=stg       # staging mode
+**    $ export APP_MODE=dev       # development mode
+**    $ export APP_MODE=prod      # production mode
+**    $ export APP_MODE=stg       # staging mode
 **
 '
   exit 1
@@ -21,8 +21,8 @@ Object.class_eval { remove_const :Config } if defined?(Config)
 
 ## load 'app.rb', 'app_xxx.rb' and 'app_xxx.private'
 require_relative "config/app"
-require_relative "config/app_#{app_env}"
-fpath = File.join(File.dirname(__FILE__), "config", "app_#{app_env}.private")
+require_relative "config/app_#{app_mode}"
+fpath = File.join(File.dirname(__FILE__), "config", "app_#{app_mode}.private")
 load fpath if File.file?(fpath)
 
 ## create $config object
