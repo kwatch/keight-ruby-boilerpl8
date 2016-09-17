@@ -66,21 +66,6 @@ namespace :setup do
     run "bundler install"
   end
 
-  desc "download jquery.js etc from cdnjs"
-  task :static do |t|
-    filename = "app/template/_layout.html.eruby"
-    rexp = %r'<script src=".*?\/([-.\w]+)\/(\d+(?:\.\d+)+[-.\w]+)/[^"]*?\.js"'
-    done = {}
-    File.read(filename).scan(rexp) do
-      library, version = $1, $2
-      key = "#{library}--#{version}"
-      unless done[key]
-        run "k8rb cdnjs #{library} #{version}"
-        done[key] = true
-      end
-    end
-  end
-
   desc "download *.js etc into 'static/lib/'"
   task :staticlib do |t|
     Dir.glob("static/lib/*/*").each do |libpath|
