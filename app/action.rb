@@ -134,7 +134,7 @@ class My::PublicPage < My::Action
     return handle_static_file(filepath)   if File.file?(filepath)
     #
     template = "#{filepath}#{ERUBY_TEXT_EXT}"
-    return handle_template_file(filepath) if File.file?(template)
+    return handle_template_file(template) if File.file?(template)
     #
     script = "#{filepath}#{SCRIPT_SUFFIX}"
     return handle_script_file(script)     if File.file?(script)
@@ -151,14 +151,14 @@ class My::PublicPage < My::Action
     return send_file(filepath)
   end
 
-  def handle_template_file(filepath)
-    basepath = filepath.sub('public/', '')
-    suffix = File.extname(filepath)
-    case suffix
+  def handle_template_file(template_path)
+    template_path = template_path.sub('public/', '')
+    template_path =~ /(\.\w+)\.\w+\z/
+    case $1
     when '.html', '.xml', '.atom'
-      content = render_html(basepath)
+      content = render_html(template_path)
     else
-      content = render_text(basepath)
+      content = render_text(template_path)
     end
     return content
   end
