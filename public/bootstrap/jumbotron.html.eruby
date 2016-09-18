@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title><%= @page_title %></title>
+    <link rel="stylesheet" href="/static/lib/twitter-bootstrap/4.0.0-alpha.4/css/bootstrap.min.css">
+    <link rel="icon" href="/static/image/favicon.ico">
+  </head>
+
+  <body>
+
+    <div id="whole" class="whole">
+
+      <header class="bg-inverse">
+        <div class="container">
+
+          <nav class="navbar navbar-dark" style="padding:0.5rem 0">
+            <a class="navbar-brand" href="/">Organzation</a>
+            <button class="navbar-toggler hidden-sm-up" type="button" data-toggle="collapse" data-target="#navbar-header" aria-controls="navbar-header">
+              <span style="color:#fff">&#9776;</span>
+            </button>
+            <div class="collapse navbar-toggleable-xs" id="navbar-header">
+              <ul class="nav navbar-nav">
+                <li class="nav-item active">
+                  <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/about.html">About</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/products.html">Products</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/support.html">Support</a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+
+        </div>
+      </header>
+
+      <div class="jumbotron">
+        <div class="container">
+          <h1 class="display-3">Hello Keight</h1>
+          <p>
+            Keight is jet-speed and compact framework for web application.
+            It runs much faster than Ruby on Rails or Sinatra.
+          </p>
+          <p>
+            <a href="https://github.com/kwatch/keight/tree/ruby"
+               class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <h2>Heading</h2>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+              do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Ut enim ad minim veniam, quis nostrud exercitation ullamco
+              laboris nisi ut aliquip ex ea commodo consequat.
+              Duis aute irure dolor in reprehenderit in voluptate velit
+              esse cillum dolore eu fugiat nulla pariatur.
+              Excepteur sint occaecat cupidatat non proident, sunt in culpa
+              qui officia deserunt mollit anim id est laborum.
+            </p>
+            <p>
+              <a class="btn btn-secondary" href="#" role="button">More &raquo;</a>
+            </p>
+          </div>
+          <div class="col-md-4">
+            <h2>Heading</h2>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+              do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Ut enim ad minim veniam, quis nostrud exercitation ullamco
+              laboris nisi ut aliquip ex ea commodo consequat.
+              Duis aute irure dolor in reprehenderit in voluptate velit
+              esse cillum dolore eu fugiat nulla pariatur.
+              Excepteur sint occaecat cupidatat non proident, sunt in culpa
+              qui officia deserunt mollit anim id est laborum.
+            </p>
+            <p>
+              <a class="btn btn-secondary" href="#" role="button">More &raquo;</a>
+            </p>
+         </div>
+          <div class="col-md-4">
+            <h2>Heading</h2>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+              do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Ut enim ad minim veniam, quis nostrud exercitation ullamco
+              laboris nisi ut aliquip ex ea commodo consequat.
+              Duis aute irure dolor in reprehenderit in voluptate velit
+              esse cillum dolore eu fugiat nulla pariatur.
+              Excepteur sint occaecat cupidatat non proident, sunt in culpa
+              qui officia deserunt mollit anim id est laborum.
+            </p>
+            <p>
+              <a class="btn btn-secondary" href="#" role="button">More &raquo;</a>
+            </p>
+          </div>
+        </div>
+
+        <hr>
+
+      </div> <!-- /container -->
+
+      <footer>
+        <div class="container">
+          <p>copyright &copy; 2016-2017 Organization all rights reserved.</p>
+        </div>
+      </footer>
+
+    </div><!-- /whole -->
+
+    <!-- ========== scripts ========== -->
+    <script src="/static/lib/jquery/3.1.0/jquery.min.js"></script>
+    <script src="/static/lib/twitter-bootstrap/4.0.0-alpha.4/js/bootstrap.min.js"></script>
+  </body>
+</html>
