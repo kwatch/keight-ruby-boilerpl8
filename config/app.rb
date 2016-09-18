@@ -28,5 +28,7 @@ class BaseConfig < Benry::BaseConfig
 
   ## add your own configs here
   add :google_analytics_code , nil              , "ex: 'UA-XXXXX-X'"
+  #add :cdn_baseurl          , 'https://ajax.googleapis.com/ajax/libs'   # Google
+  add :cdn_baseurl           , 'https://cdnjs.cloudflare.com/ajax/libs'  # CDNJS
 
 end
