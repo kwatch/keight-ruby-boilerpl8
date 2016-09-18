@@ -85,9 +85,9 @@ class My::AdminAction < My::Action
 end
 
 
-class My::StaticPage  < My::Action
+class My::StaticPage < My::Action
 
-  mapping '/{urlpath:.+}',   :GET=>:do_send_file
+  mapping '/{urlpath:str<.+>}',   :GET=>:do_send_file
   STATIC_DIR = "static"
 
   def do_send_file(urlpath)
@@ -96,7 +96,7 @@ class My::StaticPage  < My::Action
     #env = @req.env
     #header_name = env['sendfile.type'] || env['HTTP_X_SENDFILE_TYPE']
     #if header_name && ! header_name.empty?
-    #  @resp.headers[header_name] = filepath
+    #  @resp.headers[header_name] = File.absolute_path(filepath)
     #  return nil
     #else
       return send_file(filepath)
