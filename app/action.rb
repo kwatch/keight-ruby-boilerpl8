@@ -109,7 +109,6 @@ end
 class My::PublicPage < My::Action
 
   ERUBY_PATH       = ['public', 'template']
-  ERUBY_LAYOUT     = :'_layout.html'
   SCRIPT_SUFFIX    = ".app.rb"
 
   mapping '/{urlpath:str<.*>}'  ,  :GET=>:do_render
