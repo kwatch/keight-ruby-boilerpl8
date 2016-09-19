@@ -21,12 +21,10 @@ menu_items = [
     <meta name="author" content="">
     <title>ExampleSite - <%= @page_title %></title>
     <link rel="stylesheet" href="<%= cdn_baseurl %>/twitter-bootstrap/4.0.0-alpha.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/bootstrap/jumbotron.css">
     <link rel="icon" sizes="96x96" href="/static/image/favicon-96x96.png">
     <link rel="icon" sizes="32x32" href="/static/image/favicon-32x32.png">
     <link rel="icon" sizes="16x16" href="/static/image/favicon-16x16.png">
-    <style>
-      body { padding-bottom: 2rem; }
-    </style>
   </head>
 
   <body>
