@@ -1,6 +1,6 @@
 <% # -*- coding: utf-8 -*-
 
-@_layout = "bootstrap/_layout_jumbotron.html"
+@_layout = :'bootstrap/_layout_jumbotron'
 @page_title = 'home'
 @curr_menu_item = :home
 
