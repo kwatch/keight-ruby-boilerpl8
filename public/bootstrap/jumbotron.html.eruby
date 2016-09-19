@@ -1,0 +1,29 @@
+<% # -*- coding: utf-8 -*-
+
+@_layout = :'bootstrap/_layout_jumbotron'
+@page_title = 'home'
+@curr_menu_item = :home
+
+@jumbotron_title  = "Hello Keight"
+@jumbotron_desc   = "Keight is jet-speed and compact framework for web application. It runs much faster than Ruby on Rails or Sinatra."
+@jumbotron_link   = "https://github.com/kwatch/keight/tree/ruby"
+
+%>
+
+<div class="row">
+  <div class="col-md-4">
+    <h2>Heading</h2>
+    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+    <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+  </div>
+  <div class="col-md-4">
+    <h2>Heading</h2>
+    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+    <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+ </div>
+  <div class="col-md-4">
+    <h2>Heading</h2>
+    <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+    <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+  </div>
+</div>
