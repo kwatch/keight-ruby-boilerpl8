@@ -1,0 +1,83 @@
+<% # -*- coding: utf-8 -*-
+
+cdn_baseurl = $config.cdn_baseurl
+ga_code     = $config.google_analytics_code    # ex: 'UA-XXXXX-X'
+
+menu_items = [
+   ['/',         'Home',      :home],
+   ['/about',    'About',     :about],
+   ['/support',  'Support',   :support],
+]
+
+%>
+<!doctype html>
+<html lang="<%= @page_lang %>">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>ExampleSite - <%= @page_title %></title>
+    <link rel="stylesheet" href="<%= cdn_baseurl %>/pure/0.6.0/pure-min.css">
+    <link rel="stylesheet" href="<%= cdn_baseurl %>/pure/0.6.0/grids-responsive-min.css">
+    <link rel="stylesheet" href="<%= cdn_baseurl %>/font-awesome/4.6.3/css/font-awesome.css">
+    <link rel="stylesheet" href="/static/pure/css/landing.css">
+  </head>
+  <body>
+
+    <header class="header">
+      <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+        <a class="pure-menu-heading" href="">ExampleSite</a>
+
+        <ul class="pure-menu-list">
+          <% menu_items.each do |href, label, symbol| %>
+          <%   classname = @curr_menu_item == symbol ? 'pure-menu-selected' : '' %>
+          <li class="pure-menu-item <%= classname %>"><a href="<%= href %>" class="pure-menu-link"><%= label %></a></li>
+          <% end %>
+        </ul>
+      </div>
+    </header>
+
+    <% if @splash_title %>
+    <div class="splash-container">
+      <div class="splash">
+        <h1 class="splash-head"><%= @splash_title %></h1>
+        <p class="splash-subhead"><%= @splash_desc %></p>
+        <p>
+          <a href="<%= @splash_link %>" class="pure-button pure-button-primary"><%= @splash_label %></a>
+        </p>
+      </div>
+    </div>
+    <% end %>
+
+    <div class="content-wrapper">
+
+      <div class="content">
+      <%== @_content %>
+      </div>
+
+      <footer class="footer l-box is-center">
+        copyright&copy; 2016-2017 ExampleSite all rights reserved.
+      </footer>
+
+    </div>
+
+    <% ### JavaScript ### %>
+    <% # zepto.js is an alternative jquery.js %>
+    <!--script src="<%= cdn_baseurl %>/jquery/3.1.0/jquery.min.js"></script-->
+    <script src="<%= cdn_baseurl %>/zepto/1.2.0/zepto.min.js"></script>
+
+    <% ### Google Analytics ### %>
+<% if ga_code %>
+    <script>
+(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+e.src='https://www.google-analytics.com/analytics.js';
+r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+ga('create','<%= ga_code %>','auto');ga('send','pageview');
+    </script>
+<% end %>
+
+  </body>
+</html>

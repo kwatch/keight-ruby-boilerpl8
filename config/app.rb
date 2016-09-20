@@ -5,7 +5,8 @@ require 'benry/config'
 
 class BaseConfig < Benry::BaseConfig
 
-  add :app_env      , ENV['APP_ENV']  , "environment name"
+  add :app_mode     , ENV['APP_MODE'] , "prod, stg, dev or test"
+  add :app_rootdir  , Dir.pwd         , "root directory of application"
 
   ## database
   add :db_host      , 'localhost'     , "DB host name"
@@ -28,5 +29,7 @@ class BaseConfig < Benry::BaseConfig
 
   ## add your own configs here
   add :google_analytics_code , nil              , "ex: 'UA-XXXXX-X'"
+  #add :cdn_baseurl          , 'https://ajax.googleapis.com/ajax/libs'   # Google
+  add :cdn_baseurl           , 'https://cdnjs.cloudflare.com/ajax/libs'  # CDNJS
 
 end

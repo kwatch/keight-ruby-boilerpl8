@@ -40,9 +40,9 @@ module BabyErubis
         elsif ch == '#'        # comment
           src << _t(lspace) << ("\n" * code.count("\n")) << _t(rspace)
         elsif lspace && rspace # statement (with spaces)
-          src << "#{lspace} #{code};#{rspace}"
+          src << "#{lspace}#{code};#{rspace}"
         else                   # statement
-          src << _t(lspace) << "#{code};" << _t(rspace)
+          src << _t(lspace) << " #{code};" << _t(rspace)
         end
       end
       text = pos == 0 ? input : input[pos..-1]   # or $' || input
@@ -52,9 +52,14 @@ module BabyErubis
     end
 
     def render(context=nil)
-      ctxobj = context.nil?          ? Object.new
-             : ! context.is_a?(Hash) ? context
-             : context.each_with_object(Object.new) {|o, (k, v)| o.instance_variable_set("@#{k}", v) }
+      if context.nil?
+        ctxobj = Object.new
+      elsif context.is_a?(Hash)
+        ctxobj = Object.new
+        context.each {|k, v| ctxobj.instance_variable_set("@#{k}", v) }
+      else
+        ctxobj = context
+      end
       return ctxobj.instance_eval(&@proc)
     end
 
@@ -87,55 +92,152 @@ end
 
 class Main
 
+  class SystemError < StandardError
+  end
+
   def self.main
-    self.new.run(*ARGV)
+    begin
+      self.new.run(*ARGV)
+    rescue SystemError
+      $stderr.puts "***"
+      $stderr.puts "*** ERROR: Command failed."
+      $stderr.puts "***        See above error message."
+      $stderr.puts "***"
+      exit 1
+    end
   end
 
   def run(*args)
-    dryrun = args[0] == '-D'
     autoremove = ["index.txt", __FILE__]
-    fu = dryrun ? FileUtils::DryRun : FileUtils::Verbose
     #
-    files = Dir.glob('**/*', File::FNM_DOTMATCH).reject {|x|
-      x == '.git' || x.start_with?('.git/') || \
-      x == '.' || x.end_with?('/.') || autoremove.include?(x)
-    }
+    rm_rf '**/.keep'
     #
-    keeps, files = files.partition {|x| x.end_with?('/.keep') }
-    fu.rm keeps
-    #
+    files = find_files(autoremove)
     render_template_files(files)
+    puts ""
     #
     puts "## install gems"
     sys "gem install bundler"
-    sys "bundler install"
+    sys "$GEM_HOME/bin/bundler install"
+    puts ""
+    #
+    puts "## select CSS framework"
+    select_css_framework()
+    files = find_files(autoremove)  # because select_css_framework() renames some files
     #
     puts "## download jquery and so on"
-    download_libraries_in("app/template/_layout.html.eruby", "static/lib")
+    download_libraries_in("template/_layout.html.eruby", "static/lib")
     #
     puts "## files"
+    puts File.basename(Dir.pwd) + "/"
     descs = parse_index_file("index.txt")
     print_files(files, descs)
+    puts ""
     #
-    fu.rm autoremove
+    puts "## remove files"
+    rm_rf *autoremove
   end
 
   private
 
-  def sys(*args)
-    puts "$ #{args.join(' ')}"
-    system *args
+  def sys(cmd)
+    if ENV['GEM_HOME']
+      puts "$ #{cmd}"
+      cmd = cmd.gsub('$GEM_HOME', ENV['GEM_HOME'])
+    else
+      cmd = cmd.gsub('$GEM_HOME/bin/', '')
+      puts "$ #{cmd}"
+    end
+    system cmd  or
+      raise SystemError.new
+  end
+
+  def rm_rf(*args)
+    puts "$ rm -rf #{args.join(' ')}"
+    FileUtils.rm_rf args.map {|x| Dir.glob(x) }.flatten
+  end
+
+  def mv(src, dst)
+    puts "$ mv #{src} #{dst}"
+    files = Dir.glob(src)
+    if files.length == 1
+      FileUtils.mv files[0], dst
+    else
+      FileUtils.mv files, dst
+    end
+  end
+
+  def edit(filepath)
+    File.open(filepath, 'r+b') do |f|
+      s = f.read()
+      s2 = yield s
+      if s != s2
+        f.rewind()
+        f.truncate(0)
+        f.write(s2)
+      end
+    end
+  end
+
+  def find_files(excludes=[])
+    files = Dir.glob('**/*', File::FNM_DOTMATCH).reject {|x|
+      x == '.git' || x.start_with?('.git/') || \
+      x == '.' || x.end_with?('/.') || excludes.include?(x)
+    }
   end
 
   def render_template_files(filepaths, dryrun=false)
     filepaths.each do |fpath|
       next if File.directory?(fpath)
       next if fpath.start_with?('__init.')
+      next if fpath =~ /\.(png|jpg|gif|ico)\z/
       s = Boilerpl8Template.new.from_file(fpath, 'ascii-8bit').render()
       if s != File.open(fpath, 'rb') {|f| f.read }
         File.open(fpath, 'wb') {|f| f.write(s) } unless dryrun
       end
     end
+  end
+
+  def select_css_framework
+    puts "**    1. None"
+    puts "**    2. Bootstrap"
+    puts "**    3. Pure (recommended)"
+    while true
+      print "** Which CSS framework do you like? [1-3]: "
+      answer = $stdin.gets().strip().to_i
+      break if (1..3).include?(answer)
+    end
+    case answer
+    when 1     # html5boilerplate
+    when 2     # bootstrap
+      mv "template/bootstrap/_layout_jumbotron.html.eruby", "template/_layout.html.eruby"
+      mv "public/bootstrap/jumbotron.html.eruby", "public/index.html.eruby"
+      mv "static/bootstrap/jumbotron.css", "static/css/main.css"
+      edit("template/_layout.html.eruby") {|s|
+        s.sub('href="/static/bootstrap/jumbotron.css"', 'href="/static/css/main.css')
+      }
+      edit("public/index.html.eruby") {|s|
+        s = s.sub(/^ *\@_layout = .*\n/, '')
+        s
+      }
+    when 3     # pure
+      mv "template/pure/_layout_landing.html.eruby", "template/_layout.html.eruby"
+      mv "public/pure/landing.html.eruby", "public/index.html.eruby"
+      mv "static/pure/css/landing.css"   , "static/css/main.css"
+      mv "static/pure/img/file-icons.png", "static/image/file-icons.png"
+      edit("template/_layout.html.eruby") {|s|
+        s.sub('/static/pure/css/landing.css', '/static/css/main.css')
+      }
+      edit("public/index.html.eruby") {|s|
+        s.sub(/^ *\@_layout = .*\n/, '')\
+         .sub('/static/pure/img/file-icons.png', '/static/image/file-icons.png')
+      }
+    else
+      raise "** unreachable"
+    end
+    rm_rf "public/bootstrap",   "public/pure"
+    rm_rf "template/bootstrap", "template/pure"
+    rm_rf "static/bootstrap",   "static/pure"
   end
 
   def parse_index_file(filename)
@@ -159,14 +261,14 @@ class Main
   end
 
   def download_libraries_in(filepath, destdir)
-    rexp = %r'<script src=".*?\/([-.\w]+)\/(\d+(?:\.\d+)+[-.\w]+)/[^"]*?\.js"'
+    rexp = %r'<%= cdn_baseurl %>/([^/]+)/([^/]+)/'
     list = []
     File.read(filepath).scan(rexp) do
       library, version = $1, $2
       list << [library, version]
     end
     list.uniq.each do |library, version|
-      sys "cdnget cdnjs #{library} #{version} #{destdir}"
+      sys "$GEM_HOME/bin/cdnget cdnjs #{library} #{version} #{destdir}"
     end
   end
 

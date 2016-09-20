@@ -1,0 +1,79 @@
+<% # -*- coding: utf-8 -*-
+
+cdn_baseurl = $config.cdn_baseurl
+ga_code     = $config.google_analytics_code    # ex: 'UA-XXXXX-X'
+
+menu_items = [
+   ['/',         'Home',      :home],
+   ['/about',    'About',     :about],
+   ['/support',  'Support',   :support],
+]
+
+%>
+<!doctype html>
+<html class="no-js" lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title><%= @page_title %></title>
+    <link rel="stylesheet" href="<%= cdn_baseurl %>/normalize/4.2.0/normalize.min.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <script src="<%= cdn_baseurl %>/modernizr/2.8.3/modernizr.min.js"></script>
+    <link rel="icon" sizes="96x96" href="/static/image/favicon-96x96.png">
+    <link rel="icon" sizes="32x32" href="/static/image/favicon-32x32.png">
+    <link rel="icon" sizes="16x16" href="/static/image/favicon-16x16.png">
+  </head>
+  <body>
+
+    <div id="page-whole" class="page-whole">
+      <header id="page-header" class="page-header">
+        <strong id="site-logo" class="site-logo"><a href="/">ExampleSite</a></strong>
+        <nav id="nav" class="nav">
+          <ul>
+            <% menu_items.each do |href, label, symbol| %>
+            <%   if @curr_menu_item == symbol %>
+            <li class="current">
+              <a href="<%= href %>"><%= label %> <span class="screen-reader">(current)</span></a>
+            </li>
+            <%   else %>
+            <li>
+              <a href="<%= href %>"><%= label %></a>
+            </li>
+            <%   end %>
+            <% end %>
+          </ul>
+        </nav>
+      </header>
+
+      <div id="page-main" class="page-main">
+      <%== @_content %>
+      </div>
+
+      <footer id="page-footer" class="page-footer">
+        <address>
+          copyright&copy; 2016-2017 ExampleSite all rights reserved.
+        </address>
+      </footer>
+
+    </div><!-- /page-whole -->
+
+    <% ### zepto.js is compatible with and much compact than jquery.js ### %>
+    <!--script src="<%= cdn_baseurl %>/jquery/3.1.0/jquery.min.js"></script-->
+    <script src="<%= cdn_baseurl %>/zepto/1.2.0/zepto.min.js"></script>
+
+    <% ### Google Analytics ### %>
+<% if ga_code %>
+    <script>
+(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+e.src='https://www.google-analytics.com/analytics.js';
+r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+ga('create','<%= ga_code %>','auto');ga('send','pageview');
+    </script>
+<% end %>
+  </body>
+</html>

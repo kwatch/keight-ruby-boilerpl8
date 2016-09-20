@@ -1,0 +1,132 @@
+/* === page === */
+
+body {
+	margin: 0;
+	padding: 0;
+}
+
+h1, h2, h3, h4 {
+	margin-top: 30px;
+	margin-bottom: 10px;
+	color: #222;
+}
+
+.page-whole {
+	max-width: 900px;
+	margin: 0 auto;
+	padding: 0;
+	font-family: sans-serif;
+}
+
+.page-header {
+	background: #0080d0;
+	margin: 0;
+	padding: 10px 10px 20px 10px;
+	border-radius: 0 0 5px 5px;
+}
+
+.page-footer {
+	background: #0080d0;
+	margin: 30px 0 0 0;
+	padding: 10px 10px 20px 10px;
+	border-radius: 5px 5px 0 0;
+	color: #fff;
+	text-align: center;
+}
+
+.page-main {
+	padding: 10px;
+	color: #444;
+}
+
+
+/* === site log === */
+
+.site-logo {
+	float: left;
+	font-size: x-large;
+}
+.site-logo a {
+	color: #fff;
+	text-decoration: none;
+}
+.site-logo a:hover {
+	text-decoration: underline;
+}
+
+
+/* === navigation === */
+
+.nav {
+	Xborder: solid 1px red;
+}
+.nav ul {
+	text-align: right;
+	margin: 0;
+	padding-top: 5px;
+}
+.nav li {
+	display: inline-block;
+	min-width: 5rem;
+	text-align: center;
+	padding: 0;
+}
+.nav a {
+	color: #ccc;
+	text-decoration: none;
+}
+.nav .current a {
+	color: #fff;
+}
+.nav a:hover {
+	color: #fff;
+	text-decoration: underline;
+}
+
+
+/* === splash === */
+
+#splash {
+	text-align: center;
+	font-size: large;
+	margin-bottom: 50px;
+}
+
+#splash h1 {
+	font-size: 60px;
+	color: #0080d0;
+	margin: 50px 0;
+}
+#splash p {
+	margin: 50px 0;
+}
+#splash a {
+	background: #0080d0;
+	color: #fff;
+	text-decoration: none;
+	margin: 50px 0;
+	padding: 10px 20px;
+	border-radius: 5px;
+}
+
+@media screen and (min-width: 768px) {
+	#splash h1 {
+		font-size: 100px;
+	}
+}
+
+
+/* === misc === */
+
+.screen-reader {
+	display: none;
+}
+
+.more-link {
+	margin-top: -0.7em;
+}
+
+address {
+	font-style: normal;
+	font-size: small;
+}

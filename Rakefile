@@ -24,7 +24,11 @@ task :default => :test
 
 def run(command)
   print "[rake]$ "
-  sh command
+  if command.start_with?('$GEM_HOME/bin/')
+    sh command.sub('$GEM_HOME', ENV['GEM_HOME'])
+  else
+    sh command
+  end
 end
 
 def gem_home_required
@@ -54,7 +58,7 @@ end
 
 
 desc "install gems and download libs"
-task :setup => ['setup:gems', 'setup:static']
+task :setup => ['setup:gems', 'setup:staticlib']
 
 namespace :setup do
 
@@ -63,24 +67,32 @@ namespace :setup do
     gem_home_required()
     run "gem install bundler"
     puts ""
-    run "bundler install"
+    run "$GEM_HOME/bin/bundler install"
   end
 
-  desc "download jquery.js etc from cdnjs"
-  task :static do |t|
-    filename = "app/template/_layout.html.eruby"
-    rexp = %r'<script src=".*?\/([-.\w]+)\/(\d+(?:\.\d+)+[-.\w]+)/[^"]*?\.js"'
-    done = {}
-    File.read(filename).scan(rexp) do
+  desc "download *.js etc into 'static/lib/'"
+  task :staticlib do |t|
+    Dir.glob("static/lib/*/*").each do |libpath|
+      next unless File.directory?(libpath)
+      libpath =~ %r`\Astatic/lib/([^/]+)/([^/]+)\z`  or next
       library, version = $1, $2
-      key = "#{library}--#{version}"
-      unless done[key]
-        run "k8rb cdnjs #{library} #{version}"
-        done[key] = true
-      end
+      #run "k8rb cdnjs #{library} #{version}"
+      run "cdnget cdnjs #{library} #{version} static/lib"
     end
   end
 
+end
+
+
+desc "list configs"
+task :config do
+  require './main'
+  require './config'
+  $config.instance_variables.sort.each do |ivar|
+    name = ivar.to_s.sub('@', '')
+    value = $config.__send__(name)
+    puts "%-30s = %s" % [name, value.inspect]
+  end
 end
 
 

@@ -1,0 +1,89 @@
+<% # -*- coding: utf-8 -*-
+
+cdn_baseurl = $config.cdn_baseurl
+ga_code     = $config.google_analytics_code    # ex: 'UA-XXXXX-X'
+
+menu_items = [
+   ['/',         'Home',      :home],
+   ['/about',    'About',     :about],
+   ['/support',  'Support',   :support],
+]
+
+%>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <%# The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags %>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>ExampleSite - <%= @page_title %></title>
+    <link rel="stylesheet" href="<%= cdn_baseurl %>/twitter-bootstrap/4.0.0-alpha.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/bootstrap/jumbotron.css">
+    <link rel="icon" sizes="96x96" href="/static/image/favicon-96x96.png">
+    <link rel="icon" sizes="32x32" href="/static/image/favicon-32x32.png">
+    <link rel="icon" sizes="16x16" href="/static/image/favicon-16x16.png">
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-static-top navbar-dark bg-inverse">
+      <a class="navbar-brand" href="#">ExampleSite</a>
+      <ul class="nav navbar-nav">
+        <% menu_items.each do |href, label, symbol| %>
+        <%   if @curr_menu_item == symbol %>
+        <li class="nav-item active">
+          <a class="nav-link" href="<%= href %>"><%= label %> <span class="sr-only">(current)</span></a>
+        </li>
+        <%   else %>
+        <li class="nav-item">
+          <a class="nav-link" href="<%= href %>"><%= label %></a>
+        </li>
+        <%   end %>
+        <% end %>
+      </ul>
+    </nav>
+
+    <%# Main jumbotron for a primary marketing message or call to action %>
+    <% if @jumbotron_title %>
+    <div class="jumbotron">
+      <div class="container">
+        <h1 class="display-3"><%= @jumbotron_title %></h1>
+        <p><%= @jumbotron_desc %></p>
+        <p><a class="btn btn-primary btn-lg" href="<%= @jumbotron_link %>" role="button">Learn more &raquo;</a></p>
+      </div>
+    </div>
+    <% end %>
+
+    <div class="container">
+
+      <%== @_content %>
+
+      <hr>
+
+      <footer>
+        <p>copyright&copy; ExampleSite 2016-2017 all rights reserved.</p>
+      </footer>
+    </div> <!-- /container -->
+
+    <script src="<%= cdn_baseurl %>/jquery/3.1.0/jquery.min.js"></script>
+    <script src="<%= cdn_baseurl %>/tether/1.3.7/js/tether.min.js"></script>
+    <script src="<%= cdn_baseurl %>/twitter-bootstrap/4.0.0-alpha.4/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="https://maxcdn.bootstrapcdn.com/js/ie10-viewport-bug-workaround.js"></script>
+
+    <% ### Google Analytics ### %>
+<% if ga_code %>
+    <script>
+(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+e.src='https://www.google-analytics.com/analytics.js';
+r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+ga('create','<%= ga_code %>','auto');ga('send','pageview');
+    </script>
+<% end %>
+  </body>
+</html>

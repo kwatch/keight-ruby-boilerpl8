@@ -1,0 +1,55 @@
+<% # -*- coding: utf-8 -*-
+
+@page_title = "Example Page"
+
+@curr_menu_item = :home
+
+%>
+
+<div id="splash">
+  <h1>Hello Keight</h1>
+  <p>Jet-speed, concise and easy-to-learn framework for web application.</p>
+  <a href="https://github.com/kwatch/keight/tree/ruby">Learn more &raquo;</a>
+</div>
+
+<section>
+  <h2>Heading</h2>
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+    enim ad minim veniam, quis nostrud exercitation ullamco laboris
+    nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+    in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+    nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+    sunt in culpa qui officia deserunt mollit anim id est laborum.
+  </p>
+  <div class="more-link"><a href="#">More &raquo;</a></div>
+</section>
+
+<section>
+  <h2>Heading</h2>
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+    enim ad minim veniam, quis nostrud exercitation ullamco laboris
+    nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+    in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+    nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+    sunt in culpa qui officia deserunt mollit anim id est laborum.
+  </p>
+  <div class="more-link"><a href="#">More &raquo;</a></div>
+</section>
+
+<section>
+  <h2>Heading</h2>
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+    enim ad minim veniam, quis nostrud exercitation ullamco laboris
+    nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+    in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+    nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+    sunt in culpa qui officia deserunt mollit anim id est laborum.
+  </p>
+  <div class="more-link"><a href="#">More &raquo;</a></div>
+</section>

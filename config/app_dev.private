@@ -1,0 +1,12 @@
+# -*- coding: utf-8 -*-
+
+## NOTE: don't add this file into Git repository!
+
+{% require 'securerandom' %}
+class Config
+
+  set :db_pass              , ""
+  set :session_secret       , "{%= SecureRandom.urlsafe_base64(40) %}"
+  set :session_old_secret   , ""
+
+end
