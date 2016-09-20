@@ -125,6 +125,9 @@ class Main
     sys "$GEM_HOME/bin/bundler install"
     puts ""
     #
+    puts "## select CSS framework"
+    select_css_framework()
+    #
     puts "## download jquery and so on"
     download_libraries_in("app/template/_layout.html.eruby", "static/lib")
     #
@@ -166,6 +169,48 @@ class Main
         File.open(fpath, 'wb') {|f| f.write(s) } unless dryrun
       end
     end
+  end
+
+  def select_css_framework
+    puts "**    1. None"
+    puts "**    2. Bootstrap"
+    puts "**    3. Pure (recommended)"
+    while true
+      print "** Which CSS framework do you like? [1-3]: "
+      answer = $stdin.gets().strip().to_i
+      break if (1..3).include?(answer)
+    end
+    case answer
+    when 1     # html5boilerplate
+    when 2     # bootstrap
+      mv "template/bootstrap/_layout_jumbotron.html.eruby", "template/_layout.html.eruby"
+      mv "public/bootstrap/jumbotron.html.eruby", "public/index.html.eruby"
+      mv "static/bootstrap/jumbotron.css", "static/css/main.css"
+      edit("template/_layout.html.eruby") {|s|
+        s.sub('href="/static/bootstrap/jumbotron.css"', 'href="/static/css/main.css')
+      }
+      edit("public/index.html.eruby") {|s|
+        s = s.sub(/^ *\@_layout = .*\n/, '')
+        s
+      }
+    when 3     # pure
+      mv "template/pure/_layout_landing.html.eruby", "template/_layout.html.eruby"
+      mv "public/pure/landing.html.eruby", "public/index.html.eruby"
+      mv "static/pure/css/landing.css"   , "static/css/main.css"
+      mv "static/pure/img/file-icons.png", "static/image/file-icons.png"
+      edit("template/_layout.html.eruby") {|s|
+        s.sub('/static/pure/css/landing.css', '/static/css/main.css')
+      }
+      edit("public/index.html.eruby") {|s|
+        s.sub(/^ *\@_layout = .*\n/, '')\
+         .sub('/static/pure/img/file-icons.png', '/static/image/file-icons.png')
+      }
+    else
+      raise "** unreachable"
+    end
+    rm_rf "public/bootstrap",   "public/pure"
+    rm_rf "template/bootstrap", "template/pure"
+    rm_rf "static/bootstrap",   "static/pure"
   end
 
   def parse_index_file(filename)
