@@ -112,11 +112,7 @@ class Main
     #
     rm_rf '**/.keep'
     #
-    files = Dir.glob('**/*', File::FNM_DOTMATCH).reject {|x|
-      x == '.git' || x.start_with?('.git/') || \
-      x == '.' || x.end_with?('/.') || autoremove.include?(x)
-    }
-    #
+    files = find_files(autoremove)
     render_template_files(files)
     puts ""
     #
@@ -127,9 +123,10 @@ class Main
     #
     puts "## select CSS framework"
     select_css_framework()
+    files = find_files(autoremove)  # because select_css_framework() renames some files
     #
     puts "## download jquery and so on"
-    download_libraries_in("app/template/_layout.html.eruby", "static/lib")
+    download_libraries_in("template/_layout.html.eruby", "static/lib")
     #
     puts "## files"
     puts File.basename(Dir.pwd) + "/"
@@ -146,9 +143,9 @@ class Main
   def sys(cmd)
     if ENV['GEM_HOME']
       puts "$ #{cmd}"
-      cmd = cmd.gsub(/\$GEM_HOME/, ENV['GEM_HOME'])
+      cmd = cmd.gsub('$GEM_HOME', ENV['GEM_HOME'])
     else
-      cmd = cmd.gsub(/\$GEM_HOME\/bin\//, '')
+      cmd = cmd.gsub('$GEM_HOME/bin/', '')
       puts "$ #{cmd}"
     end
     system cmd  or
@@ -157,13 +154,43 @@ class Main
 
   def rm_rf(*args)
     puts "$ rm -rf #{args.join(' ')}"
-    FileUtils.rm_rf args.each {|x| Dir.glob(x) }
+    FileUtils.rm_rf args.map {|x| Dir.glob(x) }.flatten
+  end
+
+  def mv(src, dst)
+    puts "$ mv #{src} #{dst}"
+    files = Dir.glob(src)
+    if files.length == 1
+      FileUtils.mv files[0], dst
+    else
+      FileUtils.mv files, dst
+    end
+  end
+
+  def edit(filepath)
+    File.open(filepath, 'r+b') do |f|
+      s = f.read()
+      s2 = yield s
+      if s != s2
+        f.rewind()
+        f.truncate(0)
+        f.write(s2)
+      end
+    end
+  end
+
+  def find_files(excludes=[])
+    files = Dir.glob('**/*', File::FNM_DOTMATCH).reject {|x|
+      x == '.git' || x.start_with?('.git/') || \
+      x == '.' || x.end_with?('/.') || excludes.include?(x)
+    }
   end
 
   def render_template_files(filepaths, dryrun=false)
     filepaths.each do |fpath|
       next if File.directory?(fpath)
       next if fpath.start_with?('__init.')
+      next if fpath =~ /\.(png|jpg|gif|ico)\z/
       s = Boilerpl8Template.new.from_file(fpath, 'ascii-8bit').render()
       if s != File.open(fpath, 'rb') {|f| f.read }
         File.open(fpath, 'wb') {|f| f.write(s) } unless dryrun
@@ -234,7 +261,7 @@ class Main
   end
 
   def download_libraries_in(filepath, destdir)
-    rexp = %r'<script src=".*?\/([-.\w]+)\/(\d+(?:\.\d+)+[-.\w]+)/[^"]*?\.js"'
+    rexp = %r'<%= cdn_baseurl %>/([^/]+)/([^/]+)/'
     list = []
     File.read(filepath).scan(rexp) do
       library, version = $1, $2
