@@ -25,7 +25,7 @@ class My::Action < K8::Action
   ## template
   ##
 
-  ERUBY_PATH       = ['app/template']
+  ERUBY_PATH       = ['app/template', 'template']
   ERUBY_LAYOUT     = :_layout
   #ERUBY_HTML      = BabyErubis::Html
   ERUBY_HTML       = StrippedHtmlTemplate
