@@ -43,26 +43,23 @@ class My::Action < K8::Action
   alias render_text eruby_render_text
 
 
-  ##
-  ## event handler (= exception handler)
-  ##
-
   protected
 
   ##
-  ## Define event handlers here.
+  ## Error handler (or event handler)
   ##
   ## ex:
-  ##   class Event < Exception; end
-  ##   class NotExist < Event; end
-  ##   class NotPermitted < Event; end
+  ##   class Failure < Exception; end
+  ##   class NotExist < Failure; end
+  ##   class NotPermitted < Failure; end
   ##
-  ##   def on_NotExist(ev)    # or: define_method "on_Foo::Bar" do |ev|
-  ##     @resp.status_code = 404   # 404 Not Found
+  ##   when_raised NotExist do |ex|
+  ##     @resp.status = 404   # 404 Not Found
   ##     {"error"=>"Not exist"}
   ##   end
-  ##   def on_NotPermitted(ev)
-  ##     @resp.status_code = 403   # 403 Forbidden
+  ##
+  ##   when_raised NotPermitted do |ex|
+  ##     @resp.status = 403   # 403 Forbidden
   ##     {"error"=>"Not permitted"}
   ##   end
   ##
@@ -72,6 +69,18 @@ class My::Action < K8::Action
   ##   end
   ##
 
+  WHEN_RAISED = {}   # ex: {NotFoundException => proc {|ex| .... }}
+
+  def self.when_raised(exception_class, &block)
+    WHEN_RAISED[exception_class] = block
+  end
+
+  def invoke_action(action_name, urlpath_args)
+    return super
+  rescue Exception => ex
+    block = WHEN_RAISED[ex.class]  or raise
+    return instance_exec(ex, &block)
+  end
 
 end
 
