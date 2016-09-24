@@ -136,6 +136,9 @@ class Main
     #
     puts "## remove files"
     rm_rf *autoremove
+    #
+    puts ""
+    puts finished_message()
   end
 
   private
@@ -270,6 +273,22 @@ class Main
     list.uniq.each do |library, version|
       sys "$GEM_HOME/bin/cdnget cdnjs #{library} #{version} #{destdir}"
     end
+  end
+
+  def finished_message
+    project_name = File.basename(Dir.pwd)
+    return <<"END"
+##
+## Project directory created.
+## Next action:
+##
+##    $ cd #{project_name}
+##    $ export APP_MODE='dev'      # or 'prod', 'stg', 'test'
+##    $ rake -T
+##    $ rake server port=8000
+##    $ open http://localhost:8000/
+##
+END
   end
 
 end
