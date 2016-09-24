@@ -20,9 +20,8 @@ end
 
 class My::Action < K8::Action
 
-
   ##
-  ## template
+  ## Template engine (BabyErubis)
   ##
 
   ERUBY_PATH       = ['app/template', 'template']
