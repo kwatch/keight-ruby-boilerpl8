@@ -42,8 +42,7 @@ class My::Action < K8::Action
   alias render_html eruby_render_html
   alias render_text eruby_render_text
 
-
-  protected
+  public
 
   ##
   ## Error handler (or event handler)
@@ -53,12 +52,12 @@ class My::Action < K8::Action
   ##   class NotExist < Failure; end
   ##   class NotPermitted < Failure; end
   ##
-  ##   when_raised NotExist do |ex|
+  ##   def when_NotExist(ex)
   ##     @resp.status = 404   # 404 Not Found
   ##     {"error"=>"Not exist"}
   ##   end
   ##
-  ##   when_raised NotPermitted do |ex|
+  ##   def when_NotPermitted(ex)
   ##     @resp.status = 403   # 403 Forbidden
   ##     {"error"=>"Not permitted"}
   ##   end
@@ -69,17 +68,16 @@ class My::Action < K8::Action
   ##   end
   ##
 
-  WHEN_RAISED = {}   # ex: {NotFoundException => proc {|ex| .... }}
-
-  def self.when_raised(exception_class, &block)
-    WHEN_RAISED[exception_class] = block
-  end
-
   def invoke_action(action_name, urlpath_args)
     return super
   rescue Exception => ex
-    block = WHEN_RAISED[ex.class]  or raise
-    return instance_exec(ex, &block)
+    c = ex.class
+    while c != Exception
+      name = "when_#{c.name.gsub('::', '_')}"   # ex: "when_NotExist"
+      return __send__(name, ex) if respond_to?(name)
+      c = c.super
+    end
+    raise   # re-raise exception
   end
 
 end
