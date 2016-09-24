@@ -220,8 +220,7 @@ class Main
         s.sub('href="/static/bootstrap/jumbotron.css"', 'href="/static/css/main.css')
       }
       edit("public/index.html.eruby") {|s|
-        s = s.sub(/^ *\@_layout = .*\n/, '')
-        s
+        s.sub(/^ *\@_layout = .*\n/, '')
       }
     when 3     # pure
       mv "template/pure/_layout_landing.html.eruby", "template/_layout.html.eruby"
