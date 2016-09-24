@@ -4,7 +4,7 @@ $urlpath_mapping = [
   ['/'                             , "./app/action:TopPage"],
   ['/welcome'                      , "./app/page/welcome:WelcomePage"],
   ['/api', [
-    ['/hello'                      , "./app/api/hello:HelloAPI"],
+    ['/hello'                      , "./app/action/hello:HelloAPI"],
    #['/books'                      , "./app/api/books:BooksAPI"],
    #['/books/{book_id}/comments'   , "./app/api/books:BookCommentsAPI"],
    #['/orders'                     , "./app/api/orders:OrdersAPI"],
