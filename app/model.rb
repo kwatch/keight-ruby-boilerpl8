@@ -30,7 +30,7 @@ end
 
 
 ## Define event class as exception in order to be
-## caught in My::Action class.
+## caught in BaseAction class.
 class Event < Exception
 end
 

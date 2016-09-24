@@ -14,11 +14,7 @@ class StrippedHtmlTemplate < BabyErubis::Html
 end
 
 
-module My
-end
-
-
-class My::Action < K8::Action
+class BaseAction < K8::Action
 
   ##
   ## Template engine (BabyErubis)
@@ -82,7 +78,7 @@ class My::Action < K8::Action
 end
 
 
-class My::AdminAction < My::Action
+class AdminAction < BaseAction
 
   ## override template configs
   ERUBY_PATH       = ['admin/template']
@@ -91,7 +87,7 @@ class My::AdminAction < My::Action
 end
 
 
-class My::StaticPage < My::Action
+class StaticPage < BaseAction
 
   mapping '/{urlpath:str<.+>}',   :GET=>:do_send_file
   STATIC_DIR = "static"
@@ -112,7 +108,7 @@ class My::StaticPage < My::Action
 end
 
 
-class My::PublicPage < My::Action
+class PublicPage < BaseAction
 
   ERUBY_PATH       = ['public', 'template']
   SCRIPT_SUFFIX    = ".app.rb"
@@ -183,7 +179,7 @@ class My::PublicPage < My::Action
 end
 
 
-class My::TopPage < My::PublicPage
+class TopPage < PublicPage
 
   mapping ''               , :GET=>:do_render
 

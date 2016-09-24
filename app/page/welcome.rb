@@ -5,7 +5,7 @@ require 'keight'
 require_relative '../action'
 
 
-class WelcomePage < My::Action
+class WelcomePage < BaseAction
 
   mapping ''        , :GET=>:do_index
 

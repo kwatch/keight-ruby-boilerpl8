@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 $urlpath_mapping = [
-  ['/'                             , "./app/action:My::TopPage"],
+  ['/'                             , "./app/action:TopPage"],
   ['/welcome'                      , "./app/page/welcome:WelcomePage"],
   ['/api', [
     ['/hello'                      , "./app/api/hello:HelloAPI"],
@@ -10,9 +10,9 @@ $urlpath_mapping = [
    #['/orders'                     , "./app/api/orders:OrdersAPI"],
   ]],
   ['/admin', [
-   #['/books'                      , "./app/admin/books:AdminBooksPage"],
-   #['/orders'                     , "./app/admin/orders:AdminOrdersPage"],
+   #['/books'                      , "./app/admin/books:Admin::BooksPage"],
+   #['/orders'                     , "./app/admin/orders:Admi::nOrdersPage"],
   ]],
-  ['/static'                       , "./app/action:My::StaticPage"],
-  [''                              , "./app/action:My::PublicPage"],
+  ['/static'                       , "./app/action:StaticPage"],
+  [''                              , "./app/action:PublicPage"],
 ]
