@@ -13,11 +13,11 @@ class Entity
 end
 
 ## ex: Customer, Department, Company, Product, ...
-class ResourceEntity < Entity   # or NounEntity
+class NounEntity < Entity   # or ResouceEntity
 end
 
 ## ex: SalesOrder, Shipping, Requisition, Approval, ...
-class EventEntity < Entity      # or VerbEntity
+class VerbEntity < Entity      # or EventEntity
 end
 
 ## ex: Client, Supplier, Position, ...
