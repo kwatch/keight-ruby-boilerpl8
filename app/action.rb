@@ -35,7 +35,7 @@ class BaseAction < K8::Action
     return super
   rescue Exception => ex
     c = ex.class
-    while c != Exception
+    while c != Object
       name = "when_#{c.name.gsub('::', '_')}"   # ex: "when_NotExist"
       return __send__(name, ex) if respond_to?(name)
       c = c.superclass
