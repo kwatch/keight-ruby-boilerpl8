@@ -70,7 +70,7 @@ class BaseAction < K8::Action
     while c != Exception
       name = "when_#{c.name.gsub('::', '_')}"   # ex: "when_NotExist"
       return __send__(name, ex) if respond_to?(name)
-      c = c.super
+      c = c.superclass
     end
     raise   # re-raise exception
   end
