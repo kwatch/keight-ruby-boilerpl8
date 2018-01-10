@@ -29,21 +29,6 @@ class MappingEntity < Entity
 end
 
 
-## Define event class as exception in order to be
-## caught in BaseAction class.
-class Event < Exception
-end
-
-class NotExist < Event
-end
-
-class NotPermitted < Event
-end
-
-class NotCorrect < Event
-end
-
-
 ## Form class
 class Form
 
