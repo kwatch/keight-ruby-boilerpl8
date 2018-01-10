@@ -1,7 +1,7 @@
 <% # -*- coding: utf-8 -*-
 
 ##+layout
-@_layout = "pure/_layout_landing.html"
+@_layout = "pure/_layout_marketing.html"
 ##-layout
 
 @curr_menu_item = :home
@@ -18,7 +18,7 @@
 <div class="pure-g">
   <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
 
-    <h3 class="content-subhead"><i class="fa fa-rocket"></i>Get Started Quicklya</h3>
+    <h3 class="content-subhead"><i class="fa fa-rocket"></i>Get Started Quickly</h3>
     <p>Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque elementum.</p>
   </div>
   <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">

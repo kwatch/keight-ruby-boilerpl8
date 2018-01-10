@@ -223,12 +223,12 @@ class Main
         s.sub(/^ *\@_layout = .*\n/, '')
       }
     when 3     # pure
-      mv "template/pure/_layout_landing.html.eruby", "template/_layout.html.eruby"
-      mv "public/pure/landing.html.eruby", "public/index.html.eruby"
-      mv "static/pure/css/landing.css"   , "static/css/main.css"
+      mv "template/pure/_layout_marketing.html.eruby", "template/_layout.html.eruby"
+      mv "public/pure/marketing.html.eruby", "public/index.html.eruby"
+      mv "static/pure/css/marketing.css"   , "static/css/main.css"
       mv "static/pure/img/file-icons.png", "static/image/file-icons.png"
       edit("template/_layout.html.eruby") {|s|
-        s.sub('/static/pure/css/landing.css', '/static/css/main.css')
+        s.sub('/static/pure/css/marketing.css', '/static/css/main.css')
       }
       edit("public/index.html.eruby") {|s|
         s.sub(/^ *\@_layout = .*\n/, '')\
