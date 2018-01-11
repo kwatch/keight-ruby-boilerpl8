@@ -136,6 +136,9 @@ class Main
     #
     puts "## remove files"
     rm_rf *autoremove
+    #
+    puts ""
+    puts finished_message()
   end
 
   private
@@ -217,16 +220,15 @@ class Main
         s.sub('href="/static/bootstrap/jumbotron.css"', 'href="/static/css/main.css')
       }
       edit("public/index.html.eruby") {|s|
-        s = s.sub(/^ *\@_layout = .*\n/, '')
-        s
+        s.sub(/^ *\@_layout = .*\n/, '')
       }
     when 3     # pure
-      mv "template/pure/_layout_landing.html.eruby", "template/_layout.html.eruby"
-      mv "public/pure/landing.html.eruby", "public/index.html.eruby"
-      mv "static/pure/css/landing.css"   , "static/css/main.css"
+      mv "template/pure/_layout_marketing.html.eruby", "template/_layout.html.eruby"
+      mv "public/pure/marketing.html.eruby", "public/index.html.eruby"
+      mv "static/pure/css/marketing.css"   , "static/css/main.css"
       mv "static/pure/img/file-icons.png", "static/image/file-icons.png"
       edit("template/_layout.html.eruby") {|s|
-        s.sub('/static/pure/css/landing.css', '/static/css/main.css')
+        s.sub('/static/pure/css/marketing.css', '/static/css/main.css')
       }
       edit("public/index.html.eruby") {|s|
         s.sub(/^ *\@_layout = .*\n/, '')\
@@ -270,6 +272,22 @@ class Main
     list.uniq.each do |library, version|
       sys "$GEM_HOME/bin/cdnget cdnjs #{library} #{version} #{destdir}"
     end
+  end
+
+  def finished_message
+    project_name = File.basename(Dir.pwd)
+    return <<"END"
+##
+## Project directory created.
+## Next action:
+##
+##    $ cd #{project_name}
+##    $ export APP_MODE='dev'      # or 'prod', 'stg', 'test'
+##    $ rake -T
+##    $ rake server port=8000
+##    $ open http://localhost:8000/
+##
+END
   end
 
 end

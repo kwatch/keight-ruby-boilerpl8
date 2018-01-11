@@ -5,13 +5,13 @@ require 'keight'
 #require_relative '../action'
 
 
-class HelloAPI < K8::Action    # or My::Action
+class HelloAPI < K8::Action    # or BaseAction
 
   mapping ''        , :GET=>:do_index, :POST=>:do_create
   mapping '/{id}'   , :GET=>:do_show, :PUT=>:do_update, :DELETE=>:do_delete
-  ## or if you want support '/hello.json' and '/hello/123.json':
-  #mapping '{ext}'        , :GET=>:do_index, :POST=>:do_create
-  #mapping '/{id}{ext}'   , :GET=>:do_show, :PUT=>:do_update, :DELETE=>:do_delete
+  ## or
+  #mapping '.json'       , :GET=>:do_index, :POST=>:do_create
+  #mapping '/{id}.json'  , :GET=>:do_show, :PUT=>:do_update, :DELETE=>:do_delete
 
   def do_index()
     query = @req.params_query   # QUERY_STRING
