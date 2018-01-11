@@ -36,6 +36,7 @@ main.rb					create Rack app
 public/					public html files
 public/favicon.ico			empty file to avoid 404
 public/index.html.eruby			default html file
+public/robots.txt			controls crawler access
 Rakefile				for 'rake' command
 README.txt				readme file
 static/					static files
